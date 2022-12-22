@@ -1,0 +1,7 @@
+/bin
+/csv_v2
+/include
+/lib
+/lib64
+/share
+*.cfg
