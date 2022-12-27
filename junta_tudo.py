@@ -2,8 +2,17 @@ import glob
 import os
 import pandas as pd
 
+enquads = pd.read_csv(
+    'infracoes--ok.csv', 
+    sep=';', 
+    #usecols=['enquadramento']
+)
+
+enquadramentos = enquads['enquadramento'].\
+    loc[enquads.Considerada == 'Sim'].tolist()
+
 for year in range(2007,2022):
-    path = '.\\data\\'
+    path = './data/'
     ano = str(year)
     csv_files = glob.glob(os.path.join(path+ano, '*.csv'))
 
@@ -66,11 +75,17 @@ for year in range(2007,2022):
     try:    df.drop(['nom_modelo_veiculo'], axis=1, inplace=True)
     except: pass
 
-    cols = ['dat_infracao', 'nom_municipio', 'uf_infracao', 'descricao_abreviada', 'med_considerada']
+    cols = ['dat_infracao', 
+            #'nom_municipio', 
+            'uf_infracao', 
+            #'descricao_abreviada', 
+            'med_considerada']
 
-    df = df [cols]
+    df = df.loc[df.enquadramento.isin(enquadramentos)]
     
-    _path = '.\\data\\csv\\'
+    df = df[cols]
+    
+    _path = './csv_v2'
     name ='infracoes_'
     extension = '.csv'
     savePath = os.path.join(_path, name+ano+extension)
